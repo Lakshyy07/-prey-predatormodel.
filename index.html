@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6fb">
+  <title>Mathematical Modeling of Predator Prey Dynamics Under Environmental Pollution | Predator–Prey Pollution Model</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#top" aria-label="Collage Project home">
+        <span class="brand-mark">C<span>·</span></span>
+        <span class="brand-name">Mathematical Modeling of Predator Prey Dynamics Under Environmental Pollution<br> Mathematical Modeling of Predator Prey Dynamics Under Environmental Pollution </span>
+        <span class="version">v1.0</span>
+      </a>
+      <p class="sidebar-kicker">MODEL WORKSPACE</p>
+      <div class="control-heading"><h2>Model controls</h2><button id="resetAll" class="text-button" type="button">Reset all</button></div>
+      <div id="controls" class="controls"></div>
+      <div class="sidebar-foot"><span class="live-dot"></span> Coupled system · RK4 solver</div>
+    </aside>
+
+    <main id="top" class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>RESEARCH LAB</span><span class="crumb-slash">/</span><span>SIMULATION 01</span></div>
+        <div class="top-actions"><span class="system-state"><i></i><span id="runState">READY</span></span><button id="equationToggle" class="quiet-button" type="button" aria-expanded="false">ƒx <span>Equations</span></button></div>
+      </header>
+
+      <section class="hero">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> ECOLOGICAL SYSTEMS · INTERACTIVE MODEL</div><h1>Mathematical Modeling of Predator Prey Dynamics Under Environmental Pollution</h1><p>Predator–Prey Dynamics Under Environmental Pollution</p></div>
+        <div class="hero-orbit" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="orbit-core"></span><span class="orbit-point point-green"></span><span class="orbit-point point-orange"></span><span class="orbit-point point-purple"></span></div>
+      </section>
+
+      <section class="preset-strip">
+        <div class="preset-label"><span class="eyebrow-line"></span><span>SCENARIO PRESETS</span></div>
+        <div class="preset-buttons" role="group" aria-label="Simulation presets">
+          <button class="preset active" data-preset="balanced" type="button"><i class="preset-dot green"></i>Balanced coexistence</button>
+          <button class="preset" data-preset="collapse" type="button"><i class="preset-dot orange"></i>Trophic collapse</button>
+          <button class="preset" data-preset="pollution" type="button"><i class="preset-dot purple"></i>Over-pollution</button>
+          <button class="preset" data-preset="boom" type="button"><i class="preset-dot blue"></i>Boom &amp; bust</button>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Final simulation values">
+        <article class="stat-card prey-stat"><div class="stat-top"><span>FINAL PREY POPULATION</span><span class="stat-symbol">x</span></div><div id="statPrey" class="stat-value">—</div><div class="stat-foot"><span>individuals / ha</span><span id="trendPrey" class="trend">●</span></div><div class="stat-spark spark-green"></div></article>
+        <article class="stat-card predator-stat"><div class="stat-top"><span>FINAL PREDATOR POPULATION</span><span class="stat-symbol">y</span></div><div id="statPredator" class="stat-value">—</div><div class="stat-foot"><span>individuals / ha</span><span id="trendPredator" class="trend">●</span></div><div class="stat-spark spark-orange"></div></article>
+        <article class="stat-card pollution-stat"><div class="stat-top"><span>FINAL POLLUTION LEVEL</span><span class="stat-symbol">P</span></div><div id="statPollution" class="stat-value">—</div><div class="stat-foot"><span>concentration units</span><span id="trendPollution" class="trend">●</span></div><div class="stat-spark spark-purple"></div></article>
+        <article class="stat-card capacity-stat"><div class="stat-top"><span>FINAL CARRYING CAPACITY</span><span class="stat-symbol">K(P)</span></div><div id="statCapacity" class="stat-value">—</div><div class="stat-foot"><span>prey / ha</span><span class="capacity-chip" id="capacityImpact">—</span></div><div class="stat-spark spark-blue"></div></article>
+      </section>
+
+      <section class="simulation-bar panel">
+        <div class="simulation-controls"><button id="startButton" class="primary-button" type="button"><span>▶</span> Start simulation</button><button id="pauseButton" class="icon-button" type="button" title="Pause simulation" aria-label="Pause simulation">Ⅱ</button><button id="resumeButton" class="icon-button" type="button" title="Resume simulation" aria-label="Resume simulation">▶</button><button id="restartButton" class="icon-button" type="button" title="Restart simulation" aria-label="Restart simulation">↻</button><button id="resetButton" class="quiet-button" type="button">Reset run</button></div>
+        <div class="run-settings"><label>Duration <input id="duration" type="number" min="1" max="10000" step="10" value="100"><span>time units</span></label><label>Time step <input id="timeStep" type="number" min="0.001" max="10" step="0.01" value="0.1"><span>Δt</span></label><label class="auto-toggle"><input id="autoRun" type="checkbox" checked><span class="toggle-ui"></span><span>Live auto-run</span></label></div>
+      </section>
+
+      <div id="warningBox" class="warning-box" role="status" hidden></div>
+      <section id="equationsPanel" class="panel equations-panel" hidden>
+        <div class="section-head"><div><div class="eyebrow">MODEL DEFINITION</div><h2>Coupled differential equations</h2></div><span class="tag">CONTINUOUS TIME</span></div>
+        <div class="equation-list"><div class="equation-row"><span class="equation-name green-text">PREY</span><code>dx/dt = rx(1 − x / (K₀e<sup>−αP</sup>)) − axy/(1 + hx) − μₓPx</code></div><div class="equation-row"><span class="equation-name orange-text">PREDATOR</span><code>dy/dt = (eaxy)/(1 + hx) − dy − μᵧPy</code></div><div class="equation-row"><span class="equation-name purple-text">POLLUTION</span><code>dP/dt = Q + ηx − δP − RP/(H + P)</code></div></div>
+        <p class="equation-note">The solver integrates these three rates together. Pollution reduces the prey’s effective carrying capacity, while predation saturates as prey density grows.</p>
+      </section>
+
+      <section class="chart-grid" aria-label="Simulation graphs">
+        <article class="chart-card panel chart-wide"><div class="chart-heading"><div><div class="chart-index">01 <span>· POPULATION DYNAMICS</span></div><h2>Ecosystem populations</h2></div><span class="chart-unit">INDIVIDUALS / HA</span></div><div class="chart-wrap"><canvas id="populationChart" aria-label="Prey and predator populations over time"></canvas></div></article>
+        <article class="chart-card panel"><div class="chart-heading"><div><div class="chart-index">02 <span>· ENVIRONMENT</span></div><h2>Pollution concentration</h2></div><span class="chart-unit">CONCENTRATION</span></div><div class="chart-wrap"><canvas id="pollutionChart" aria-label="Pollution concentration over time"></canvas></div></article>
+        <article class="chart-card panel"><div class="chart-heading"><div><div class="chart-index">03 <span>· INTERACTION SPACE</span></div><h2>Phase portrait</h2></div><span class="chart-unit">PREY × PREDATOR</span></div><div class="chart-wrap"><canvas id="phaseChart" aria-label="Prey and predator phase portrait"></canvas></div></article>
+        <article class="chart-card panel chart-wide"><div class="chart-heading"><div><div class="chart-index">04 <span>· HABITAT LIMIT</span></div><h2>Carrying capacity</h2></div><span class="chart-unit">PREY / HA</span></div><div class="chart-wrap"><canvas id="capacityChart" aria-label="Baseline and pollution-adjusted carrying capacity over time"></canvas></div></article>
+      </section>
+
+      <section class="analysis-section panel"><div class="section-head"><div><div class="eyebrow">MODEL READOUT</div><h2>Scientific analysis</h2></div><span id="equilibriumBadge" class="tag">CALCULATING</span></div><div id="analysisGrid" class="analysis-grid"></div></section>
+      <section class="export-bar panel"><div><div class="eyebrow">TAKE YOUR RESULTS</div><strong>Export this simulation</strong></div><div class="export-buttons"><button id="csvButton" class="quiet-button" type="button">↓ <span>Export CSV</span></button><button id="graphsButton" class="quiet-button" type="button">▧ <span>Download graphs</span></button><button id="imageButton" class="quiet-button" type="button">▣ <span>Save dashboard image</span></button></div></section>
+
+      <section class="education-section"><div class="education-intro"><div class="eyebrow"><span class="eyebrow-line"></span> FIELD NOTES</div><h2>UNDERSTANDING OUR<br><span>MATHEMATICAL MODEL</span></h2><p>A compact guide to the ecological ideas and numerical methods behind this simulation.</p></div><div class="education-grid"><article><span class="edu-number">01</span><h3>Predator–prey relationships</h3><p>Prey grow when resources are available. Predators gain energy by consuming prey, and the interaction term saturates as prey become abundant.</p></article><article><span class="edu-number">02</span><h3>Pollution &amp; habitat</h3><p>Pollution is added from an external source and prey activity, then removed naturally and through a saturating cleanup process. More pollution lowers the prey’s effective carrying capacity.</p></article><article><span class="edu-number">03</span><h3>Carrying capacity</h3><p><i>K(P) = K₀e<sup>−αP</sup></i> describes the pollution-adjusted limit on the prey population. The blue chart compares it with the clean-environment baseline.</p></article><article><span class="edu-number">04</span><h3>Differential equations</h3><p>Each equation gives an instantaneous rate of change. Together they describe how prey, predators, and pollution influence one another through time.</p></article><article><span class="edu-number">05</span><h3>Population dynamics</h3><p>Feedback between food supply and predator pressure can create rises and falls. Strong pressure or toxic conditions may drive a population toward extinction.</p></article><article><span class="edu-number">06</span><h3>RK4 &amp; reading the graphs</h3><p>Fourth-order Runge–Kutta samples the coupled rates four times per step for accurate numerical integration. The time-series charts show change; the phase portrait shows prey–predator pairings.</p></article></div></section>
+      <footer class="footer"><span>COLLAGE PROJECT <span class="footer-sep">·</span> PREDATOR–PREY POLLUTION MODEL</span><span>DETERMINISTIC MODEL <span class="footer-sep">·</span> RK4</span></footer>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
